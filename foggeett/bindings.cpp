@@ -4,7 +4,6 @@
 
 namespace py = pybind11;
 
-
 PYBIND11_MODULE(_core, m) {
     
     py::class_<KPIConfig>(m, "KPIConfig")
@@ -14,7 +13,6 @@ PYBIND11_MODULE(_core, m) {
         .def_readwrite("campo", &KPIConfig::campo)
         .def_readwrite("params", &KPIConfig::params);
 
-    
     py::class_<KPIResult>(m, "KPIResult")
         .def(py::init<>())
         .def_readwrite("acro", &KPIResult::acro)
@@ -55,10 +53,39 @@ PYBIND11_MODULE(_core, m) {
                    self.description == other.description &&
                    self.debug == other.debug;
         });
-    
-    
 
-    m.def("slope", &slope, py::arg("ticks"), py::arg("campo"), py::arg("n"));
-    m.def("sma", &sma, py::arg("ticks"), py::arg("campo"), py::arg("n"));
+    // === FUNÇÕES SLOPE ===
+    m.def("slope", 
+        py::overload_cast<const std::vector<Tick>&, const std::string&, std::optional<int>, const std::string&>(&slope),
+        py::arg("ticks"),
+        py::arg("campo"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    m.def("slope", 
+        py::overload_cast<const std::vector<double>&, std::optional<int>, const std::string&>(&slope),
+        py::arg("values"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    // === FUNÇÕES SMA ===
+    m.def("sma", 
+        py::overload_cast<const std::vector<Tick>&, const std::string&, std::optional<int>, const std::string&>(&sma),
+        py::arg("ticks"),
+        py::arg("campo"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    m.def("sma", 
+        py::overload_cast<const std::vector<double>&, std::optional<int>, const std::string&>(&sma),
+        py::arg("values"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    // === FUNÇÃO ENRICH ===
     m.def("enrich", &enrich, py::arg("ticks"), py::arg("kpis"));
 }
