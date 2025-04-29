@@ -6,6 +6,7 @@ namespace py = pybind11;
 
 
 PYBIND11_MODULE(_core, m) {
+    
     py::class_<KPIConfig>(m, "KPIConfig")
         .def(py::init<const std::string&, const std::string&, const std::map<std::string, float>&>(),
              py::arg("function"), py::arg("campo"), py::arg("params"))
@@ -13,6 +14,7 @@ PYBIND11_MODULE(_core, m) {
         .def_readwrite("campo", &KPIConfig::campo)
         .def_readwrite("params", &KPIConfig::params);
 
+    
     py::class_<KPIResult>(m, "KPIResult")
         .def(py::init<>())
         .def_readwrite("acro", &KPIResult::acro)
@@ -34,8 +36,27 @@ PYBIND11_MODULE(_core, m) {
             repr += "'description': '" + self.description + "'";
             repr += "}";
             return repr;
+        })
+        .def("to_str", [](const KPIResult& self) {
+            return self.acro + ": " + std::to_string(self.value) + " (" + self.description + ")";
+        })
+        .def("to_json", [](const KPIResult& self) {
+            py::dict d;
+            d["acro"] = self.acro;
+            d["value"] = self.value;
+            d["description"] = self.description;
+            d["debug"] = self.debug;
+            py::object json = py::module_::import("json");
+            return json.attr("dumps")(d);
+        })
+        .def("__eq__", [](const KPIResult& self, const KPIResult& other) {
+            return self.acro == other.acro &&
+                   self.value == other.value &&
+                   self.description == other.description &&
+                   self.debug == other.debug;
         });
-        
+    
+    
 
     m.def("slope", &slope, py::arg("ticks"), py::arg("campo"), py::arg("n"));
     m.def("sma", &sma, py::arg("ticks"), py::arg("campo"), py::arg("n"));
