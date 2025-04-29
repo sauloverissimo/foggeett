@@ -1,15 +1,22 @@
 [project]
 name = "foggeett"
 version = "0.1.0"
-description = "Biblioteca C++ de alta performance para trading"
-authors = [{name = "Seu Nome", email = "voce@email"}]
+description = "High-performance C++ library for technical analysis and trading indicators."
+authors = [
+  {name = "Saulo Veríssimo", email = "sauloverissimo@outlook.com"}
+]
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.9"
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: C++",
-  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "License :: OSI Approved :: MIT License"
 ]
 
 [build-system]
