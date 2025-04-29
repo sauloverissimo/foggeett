@@ -34,9 +34,9 @@ std::optional<KPIResult> slope(const std::vector<Tick>& ticks,
     double slope_v = (N * sum_xy - sum_x * sum_y) / denom;
 
     KPIResult r;
-    r.sigla     = "SLOPEP_" + campo.substr(0,3);
-    r.valor     = slope_v;
-    r.descricao = "Inclinação da regressão linear de " + campo;
+    r.acro     = "SLOPEP_" + campo.substr(0,3);
+    r.value     = slope_v;
+    r.description = "Inclinação da regressão linear de " + campo;
     // debug minimal: primeiro e último ponto
     r.debug = {
         {"x0", x.front()}, {"y0", y.front()},
@@ -60,9 +60,9 @@ std::optional<KPIResult> sma(const std::vector<Tick>& ticks,
     double mean = sum / m;
 
     KPIResult r;
-    r.sigla     = "SMA_" + campo.substr(0,3);
-    r.valor     = mean;
-    r.descricao = "Média móvel simples de " + campo;
+    r.acro     = "SMA_" + campo.substr(0,3);
+    r.value     = mean;
+    r.description = "Média móvel simples de " + campo;
     r.debug     = { {"count", static_cast<double>(m)} };
     return r;
 }
@@ -83,7 +83,7 @@ std::map<std::string, double> enrich(const std::vector<Tick>& ticks,
         // se quiser mais funções, basta estender aqui...
 
         if (r.has_value()) {
-            results[key] = r->valor;
+            results[key] = r->value;
         }
     }
     return results;

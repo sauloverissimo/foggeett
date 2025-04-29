@@ -17,9 +17,9 @@ struct KPIConfig {
 
 // Resultado de um KPI (sigla, valor, descrição e dados de debug simples)
 struct KPIResult {
-    std::string sigla;
-    double valor;
-    std::string descricao;
+    std::string acro;
+    double value;
+    std::string description;
     std::map<std::string, double> debug;
 };
 
