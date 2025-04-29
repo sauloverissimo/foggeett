@@ -18,6 +18,6 @@ This project is ideal for traders, data scientists, and developers who need high
 Clone the repository and install in editable mode:
 
 ```bash
-git clone https://github.com/yourusername/foggeett.git
+git clone https://github.com/sauloverissimo/foggeett.git
 cd foggeett
 pip install -e .
