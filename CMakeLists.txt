@@ -1,17 +1,27 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.15)
 project(foggeett LANGUAGES CXX)
 
-# Diz ao pybind11 para detectar o Python correto
-set(PYBIND11_FINDPYTHON ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(pybind11 CONFIG REQUIRED)   # fornecido via pip
-pybind11_add_module(_core  # nome final
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/foggeett)
+
+add_library(_core MODULE
     foggeett/bindings.cpp
-    foggeett/functions.cpp
+    foggeett/functions/utils.cpp
+    foggeett/functions/slope.cpp
+    foggeett/functions/sma.cpp
+    foggeett/functions/enrich.cpp
 )
 
-target_include_directories(_core PRIVATE foggeett)
-target_compile_features(_core PRIVATE cxx_std_17)
+set_target_properties(_core PROPERTIES PREFIX "" SUFFIX ".pyd")  # <- IMPORTANTE NO WINDOWS
 
-# Instala no mesmo diretório do pacote
-install(TARGETS _core DESTINATION foggeett)
+find_package(pybind11 REQUIRED)
+target_link_libraries(_core PRIVATE pybind11::module)
+
+# Ajuste para build correto em editable
+install(TARGETS _core
+    LIBRARY DESTINATION foggeett
+    RUNTIME DESTINATION foggeett  # <- necessário para Windows (runtime *.pyd)
+    ARCHIVE DESTINATION foggeett
+)

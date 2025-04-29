@@ -1,6 +1,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include "functions.hpp"
+#include "functions/functions.hpp"
+
+
 
 namespace py = pybind11;
 
