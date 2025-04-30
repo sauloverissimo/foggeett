@@ -3,6 +3,8 @@
 #include "functions.hpp"
 #include <numeric>
 
+
+
 std::optional<KPIResult> slope(const std::vector<Tick>& ticks,
                                const std::string& campo,
                                std::optional<int> n,
@@ -71,3 +73,4 @@ std::optional<KPIResult> slope(const std::vector<double>& values,
     };
     return r;
 }
+

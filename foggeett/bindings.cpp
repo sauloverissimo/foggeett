@@ -88,6 +88,91 @@ PYBIND11_MODULE(_core, m) {
         py::arg("direction") = "desc"
     );
 
+    // === FUNÇÕES WMA ===
+    m.def("wma", 
+        py::overload_cast<const std::vector<Tick>&, const std::string&, std::optional<int>, const std::string&>(&wma),
+        py::arg("ticks"),
+        py::arg("campo"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    m.def("wma", 
+        py::overload_cast<const std::vector<double>&, std::optional<int>, const std::string&>(&wma),
+        py::arg("values"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    // === EMA FUNCTIONS ===
+    m.def("ema", 
+        py::overload_cast<const std::vector<Tick>&, const std::string&, std::optional<int>, const std::string&>(&ema),
+        py::arg("ticks"),
+        py::arg("field"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    m.def("ema", 
+        py::overload_cast<const std::vector<double>&, std::optional<int>, const std::string&>(&ema),
+        py::arg("values"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    // === MOM FUNCTIONS ===
+    m.def("mom", 
+        py::overload_cast<const std::vector<Tick>&, const std::string&, std::optional<int>, const std::string&>(&mom),
+        py::arg("ticks"),
+        py::arg("field"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    m.def("mom", 
+        py::overload_cast<const std::vector<double>&, std::optional<int>, const std::string&>(&mom),
+        py::arg("values"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    // === ROC FUNCTIONS ===
+    m.def("roc", 
+        py::overload_cast<const std::vector<Tick>&, const std::string&, std::optional<int>, const std::string&>(&roc),
+        py::arg("ticks"),
+        py::arg("field"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    m.def("roc", 
+        py::overload_cast<const std::vector<double>&, std::optional<int>, const std::string&>(&roc),
+        py::arg("values"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
+    m.def("macd", 
+        py::overload_cast<const std::vector<Tick>&, const std::string&, int, int, std::optional<int>, const std::string&>(&macd),
+        py::arg("ticks"), py::arg("campo"), py::arg("short_period") = 12, py::arg("long_period") = 26,
+        py::arg("signal_period") = std::nullopt, py::arg("direction") = "desc"
+    );
+    
+    m.def("macd", 
+        py::overload_cast<const std::vector<double>&, int, int, std::optional<int>, const std::string&>(&macd),
+        py::arg("values"), py::arg("short_period") = 12, py::arg("long_period") = 26,
+        py::arg("signal_period") = std::nullopt, py::arg("direction") = "desc"
+    );
+
+    // === FUNÇÃO OBV ===
+    m.def("obv",
+        &obv,
+        py::arg("ticks"),
+        py::arg("volume_field"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc"
+    );
+
     // === FUNÇÃO ENRICH ===
     m.def("enrich", &enrich, py::arg("ticks"), py::arg("kpis"));
 }

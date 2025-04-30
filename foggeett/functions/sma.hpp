@@ -1,18 +1,19 @@
 #pragma once
-
-#include <vector>
+#include "functions.hpp"
 #include <optional>
-#include <string>
-#include <map>
-#include "utils.hpp"
 
-struct KPIResult;
+// === Sinal tradicional ===
+// Retorna SMA de um campo específico em uma janela n
+std::optional<KPIResult> sma(
+    const std::vector<Tick>& ticks,
+    const std::string& campo,
+    std::optional<int> n,
+    const std::string& direction);
 
-std::optional<KPIResult> sma(const std::vector<Tick>& ticks,
-                             const std::string& campo,
-                             std::optional<int> n = std::nullopt,
-                             const std::string& direction = "desc");
+// === Sinal alternativo ===
+// Permite calcular a SMA diretamente sobre um vetor de valores
+std::optional<KPIResult> sma(
+    const std::vector<double>& values,
+    std::optional<int> n,
+    const std::string& direction);
 
-std::optional<KPIResult> sma(const std::vector<double>& values,
-                             std::optional<int> n = std::nullopt,
-                             const std::string& direction = "desc");

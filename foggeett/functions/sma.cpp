@@ -3,6 +3,8 @@
 #include "functions.hpp"
 #include <numeric>
 
+
+
 std::optional<KPIResult> sma(const std::vector<Tick>& ticks,
                              const std::string& campo,
                              std::optional<int> n,
@@ -37,3 +39,4 @@ std::optional<KPIResult> sma(const std::vector<double>& values,
     r.debug = { {"count", static_cast<double>(y.size())} };
     return r;
 }
+

@@ -11,6 +11,12 @@ add_library(_core MODULE
     foggeett/functions/utils.cpp
     foggeett/functions/slope.cpp
     foggeett/functions/sma.cpp
+    foggeett/functions/wma.cpp
+    foggeett/functions/ema.cpp
+    foggeett/functions/mom.cpp
+    foggeett/functions/macd.cpp
+    foggeett/functions/roc.cpp
+    foggeett/functions/obv.cpp
     foggeett/functions/enrich.cpp
 )
 
