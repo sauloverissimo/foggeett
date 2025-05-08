@@ -25,3 +25,11 @@ std::vector<Tick> prepare_ticks(
     std::optional<int> n = std::nullopt,
     const std::string& direction = "desc"
 );
+
+
+// Versão alternativa para seleção correta dos últimos N ticks na ordem cronológica
+std::vector<Tick> prepare_ticks_fix(
+    const std::vector<Tick>& ticks,
+    std::optional<int> n,
+    const std::string& direction
+);

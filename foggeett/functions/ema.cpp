@@ -47,3 +47,4 @@ std::optional<KPIResult> ema(
 
     return r;
 }
+

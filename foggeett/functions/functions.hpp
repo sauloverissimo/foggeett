@@ -31,4 +31,5 @@ struct KPIResult {
 #include "functions/roc.hpp"
 #include "functions/macd.hpp"
 #include "functions/obv.hpp"
+#include "functions/adx.hpp"
 #include "functions/enrich.hpp"

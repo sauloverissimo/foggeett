@@ -61,3 +61,22 @@ std::vector<Tick> prepare_ticks(
 
     return out;
 }
+
+std::vector<Tick> prepare_ticks_fix(
+    const std::vector<Tick>& ticks,
+    std::optional<int> n,
+    const std::string& direction) {
+    
+    std::vector<Tick> out = ticks;
+
+    if (direction == "asc") {
+        std::reverse(out.begin(), out.end());  // passa para cronológico
+    }
+
+    if (n && out.size() > static_cast<size_t>(*n)) {
+        // PEGA os últimos N da ordem cronológica
+        out = std::vector<Tick>(out.end() - *n, out.end());
+    }
+
+    return out;
+}

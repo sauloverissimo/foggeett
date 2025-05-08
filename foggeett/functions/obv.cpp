@@ -2,27 +2,34 @@
 #include "utils.hpp"
 #include <numeric>
 
-
-
 std::optional<KPIResult> obv(
     const std::vector<Tick>& ticks,
     const std::string& volume_field,
     std::optional<int> n,
     const std::string& direction) {
 
-    std::vector<Tick> dados = prepare_ticks(ticks, n, direction);
+    // Sempre inverter primeiro, para garantir ordem cronológica: antiga → recente
+    std::vector<Tick> dados = ticks;
+    if (direction == "asc") {
+        std::reverse(dados.begin(), dados.end());
+    }
+
+    // Depois aplicar o recorte dos últimos N elementos
+    if (n && dados.size() > static_cast<size_t>(*n)) {
+        dados = std::vector<Tick>(dados.end() - *n, dados.end());
+    }
 
     if (dados.size() < 2)
         return std::nullopt;
 
-    // Verificação rigorosa: todos os ticks precisam ter os campos exigidos
+    // Verificação de campos obrigatórios
     for (const auto& t : dados) {
         if (t.count("price") == 0 || t.count(volume_field) == 0)
             return std::nullopt;
     }
 
+    // Cálculo OBV
     double obv_value = 0.0;
-
     for (size_t i = 1; i < dados.size(); ++i) {
         double preco_atual = dados[i].at("price");
         double preco_anterior = dados[i - 1].at("price");
@@ -33,8 +40,10 @@ std::optional<KPIResult> obv(
         } else if (preco_atual < preco_anterior) {
             obv_value -= volume;
         }
+        // Se igual: nada acontece
     }
 
+    // Retorno do KPI
     KPIResult r;
     r.acro = "OBV_" + volume_field.substr(0, 3) + (n ? "_" + std::to_string(*n) : "");
     r.value = obv_value;
@@ -43,4 +52,3 @@ std::optional<KPIResult> obv(
 
     return r;
 }
-

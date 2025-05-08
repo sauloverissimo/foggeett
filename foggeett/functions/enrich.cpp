@@ -43,6 +43,11 @@ std::map<std::string, double> enrich(const std::vector<Tick>& ticks,
             r = obv(ticks, cfg.campo, window, direction);
         }
 
+        else if (cfg.function == "adx") {
+            r = adx(ticks, cfg.campo, window, direction);
+        }
+        
+
         else if (cfg.function == "macd") {
             int short_p = cfg.params.count("short") ? static_cast<int>(cfg.params.at("short")) : 12;
             int long_p  = cfg.params.count("long")  ? static_cast<int>(cfg.params.at("long"))  : 26;

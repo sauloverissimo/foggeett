@@ -172,6 +172,14 @@ PYBIND11_MODULE(_core, m) {
         py::arg("n") = std::nullopt,
         py::arg("direction") = "desc"
     );
+        
+    // === FUNÇÃO ADX ===
+    m.def("adx", &adx,
+        py::arg("ticks"),
+        py::arg("campo"),
+        py::arg("n") = std::nullopt,
+        py::arg("direction") = "desc");
+  
 
     // === FUNÇÃO ENRICH ===
     m.def("enrich", &enrich, py::arg("ticks"), py::arg("kpis"));

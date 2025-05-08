@@ -17,6 +17,7 @@ add_library(_core MODULE
     foggeett/functions/macd.cpp
     foggeett/functions/roc.cpp
     foggeett/functions/obv.cpp
+    foggeett/functions/adx.cpp
     foggeett/functions/enrich.cpp
 )
 
