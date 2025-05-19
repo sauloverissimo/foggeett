@@ -1,17 +1,19 @@
+// functions.hpp
 #pragma once
 
-// Tipos centrais
 #include <string>
 #include <vector>
 #include <map>
 #include <optional>
+#include <variant>
 
 using Tick = std::map<std::string, double>;
+using ParamType = std::variant<int, double, std::string>;
 
 struct KPIConfig {
     std::string function;
     std::string campo;
-    std::map<std::string, float> params;
+    std::map<std::string, ParamType> params;
 };
 
 struct KPIResult {
