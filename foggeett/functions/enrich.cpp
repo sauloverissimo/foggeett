@@ -5,6 +5,8 @@
 #include <optional>
 #include <variant>
 #include <algorithm>
+#include <algorithm>
+
 
 std::map<std::string, double> enrich(const std::vector<Tick>& ticks,
                                      const std::map<std::string, KPIConfig>& kpis) {

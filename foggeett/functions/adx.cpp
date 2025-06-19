@@ -4,6 +4,8 @@
 #include <numeric>
 #include <sstream>
 #include <optional>
+#include <algorithm>
+
 
 std::optional<KPIResult> adx(const std::vector<Tick>& ticks,
                              const std::string& campo,

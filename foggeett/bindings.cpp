@@ -3,6 +3,8 @@
 #include <pybind11/stl.h>
 #include <variant>
 #include "functions/functions.hpp"
+#include <algorithm>
+
 
 namespace py = pybind11;
 

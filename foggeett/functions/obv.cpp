@@ -1,6 +1,8 @@
 #include "obv.hpp"
 #include "utils.hpp"
 #include <numeric>
+#include <algorithm>
+
 
 std::optional<KPIResult> obv(
     const std::vector<Tick>& ticks,

@@ -1,6 +1,8 @@
 #include "ema.hpp"
 #include "utils.hpp"
 #include "functions.hpp"
+#include <algorithm>
+
 
 
 std::optional<KPIResult> ema(

@@ -1,5 +1,7 @@
 #include "utils.hpp"
 #include <algorithm>
+#include <algorithm>
+
 
 std::vector<double> prepare_y(
     const std::vector<Tick>& ticks,

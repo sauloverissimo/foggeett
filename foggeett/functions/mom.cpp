@@ -1,6 +1,7 @@
 #include "mom.hpp"
 #include "utils.hpp"
 #include "functions.hpp"
+#include <algorithm>
 
 
 std::optional<KPIResult> mom(

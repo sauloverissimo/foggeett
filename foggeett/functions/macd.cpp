@@ -2,6 +2,8 @@
 #include "utils.hpp"
 #include "functions.hpp"
 #include <numeric>
+#include <algorithm>
+
 
 
 // Função interna renomeada para evitar ambiguidade

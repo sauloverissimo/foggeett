@@ -2,6 +2,8 @@
 #include "utils.hpp"
 #include "functions.hpp"
 #include <numeric>
+#include <algorithm>
+
 
 std::optional<KPIResult> wma(
     const std::vector<Tick>& ticks,
