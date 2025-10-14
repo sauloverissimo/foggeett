@@ -1,10 +1,10 @@
 #include "functions.hpp"
 #include "macd.hpp"
+#include "rsi.hpp"
 #include <map>
 #include <string>
 #include <optional>
 #include <variant>
-#include <algorithm>
 #include <algorithm>
 
 
@@ -60,12 +60,61 @@ std::map<std::string, double> enrich(const std::vector<Tick>& ticks,
         } else if (cfg.function == "adx") {
             r = adx(ticks, cfg.campo, window, direction);
         } else if (cfg.function == "macd") {
-            int short_p = cfg.params.count("short") ? static_cast<int>(std::get<double>(cfg.params.at("short"))) : 12;
-            int long_p  = cfg.params.count("long")  ? static_cast<int>(std::get<double>(cfg.params.at("long")))  : 26;
-            std::optional<int> signal_p = cfg.params.count("signal")
-                                            ? std::optional<int>(static_cast<int>(std::get<double>(cfg.params.at("signal"))))
-                                            : std::nullopt;
+            // Extrair parâmetros do MACD com variant handling
+            int short_p = 12;
+            if (cfg.params.count("short")) {
+                const auto& val = cfg.params.at("short");
+                if (std::holds_alternative<int>(val)) {
+                    short_p = std::get<int>(val);
+                } else if (std::holds_alternative<double>(val)) {
+                    short_p = static_cast<int>(std::get<double>(val));
+                }
+            }
+            
+            int long_p = 26;
+            if (cfg.params.count("long")) {
+                const auto& val = cfg.params.at("long");
+                if (std::holds_alternative<int>(val)) {
+                    long_p = std::get<int>(val);
+                } else if (std::holds_alternative<double>(val)) {
+                    long_p = static_cast<int>(std::get<double>(val));
+                }
+            }
+            
+            std::optional<int> signal_p = std::nullopt;
+            if (cfg.params.count("signal")) {
+                const auto& val = cfg.params.at("signal");
+                if (std::holds_alternative<int>(val)) {
+                    signal_p = std::get<int>(val);
+                } else if (std::holds_alternative<double>(val)) {
+                    signal_p = static_cast<int>(std::get<double>(val));
+                }
+            }
+            
             r = macd(ticks, cfg.campo, short_p, long_p, signal_p, direction);
+        } else if (cfg.function == "rsi") {
+            // Extrair parâmetros do RSI com variant handling
+            int n_period = 14;
+            if (cfg.params.count("n")) {
+                const auto& val = cfg.params.at("n");
+                if (std::holds_alternative<int>(val)) {
+                    n_period = std::get<int>(val);
+                } else if (std::holds_alternative<double>(val)) {
+                    n_period = static_cast<int>(std::get<double>(val));
+                }
+            }
+            
+            int window_size = 60;
+            if (cfg.params.count("window")) {
+                const auto& val = cfg.params.at("window");
+                if (std::holds_alternative<int>(val)) {
+                    window_size = std::get<int>(val);
+                } else if (std::holds_alternative<double>(val)) {
+                    window_size = static_cast<int>(std::get<double>(val));
+                }
+            }
+            
+            r = rsi(ticks, cfg.campo, n_period, window_size);
         }
 
         if (r.has_value()) {

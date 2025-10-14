@@ -4,7 +4,7 @@
 #include <numeric>
 #include <algorithm>
 
-
+// WMA usando std::vector<Tick>
 std::optional<KPIResult> wma(
     const std::vector<Tick>& ticks,
     const std::string& campo,
@@ -14,8 +14,12 @@ std::optional<KPIResult> wma(
     auto y = prepare_y(ticks, campo, n, direction);
     if (y.empty()) return std::nullopt;
 
+    // Create weights vector where the most recent value has the highest weight
     std::vector<int> weights(y.size());
-    std::iota(weights.begin(), weights.end(), 1);
+    int nval = y.size();
+    for (int i = 0; i < nval; ++i) {
+        weights[i] = nval - i;
+    }
 
     double weighted_sum = 0.0;
     double weight_sum = 0.0;
@@ -37,6 +41,7 @@ std::optional<KPIResult> wma(
     return r;
 }
 
+// WMA usando std::vector<double>
 std::optional<KPIResult> wma(
     const std::vector<double>& values,
     std::optional<int> n,
@@ -45,9 +50,14 @@ std::optional<KPIResult> wma(
     auto y = prepare_y(values, n, direction);
     if (y.empty()) return std::nullopt;
 
+    // Create weights vector where the most recent value has the highest weight
     std::vector<int> weights(y.size());
-    std::iota(weights.begin(), weights.end(), 1);
+    int nval = y.size();
+    for (int i = 0; i < nval; ++i) {
+        weights[i] = nval - i;
+    }
 
+    // Calculate the weighted moving average
     double weighted_sum = 0.0;
     double weight_sum = 0.0;
     for (size_t i = 0; i < y.size(); ++i) {
@@ -67,4 +77,3 @@ std::optional<KPIResult> wma(
     };
     return r;
 }
-

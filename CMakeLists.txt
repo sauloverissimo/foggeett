@@ -18,17 +18,31 @@ add_library(_core MODULE
     foggeett/functions/roc.cpp
     foggeett/functions/obv.cpp
     foggeett/functions/adx.cpp
+    foggeett/functions/rsi.cpp
     foggeett/functions/enrich.cpp
+    foggeett/functions/extract.cpp
+
 )
 
-set_target_properties(_core PROPERTIES PREFIX "" SUFFIX ".pyd")  # <- IMPORTANTE NO WINDOWS
+# --------- UNIVERSAL WINDOWS / LINUX ---------
+if (WIN32)
+    set_target_properties(_core PROPERTIES PREFIX "" SUFFIX ".pyd")
+else()
+    set_target_properties(_core PROPERTIES PREFIX "" SUFFIX ".so")
+endif()
+# ----------------------------
 
 find_package(pybind11 REQUIRED)
 target_link_libraries(_core PRIVATE pybind11::module)
 
-# Ajuste para build correto em editable
 install(TARGETS _core
     LIBRARY DESTINATION foggeett
-    RUNTIME DESTINATION foggeett  # <- necessário para Windows (runtime *.pyd)
+    RUNTIME DESTINATION foggeett
     ARCHIVE DESTINATION foggeett
 )
+
+# Install the header files
+install(DIRECTORY foggeett/
+    DESTINATION foggeett
+    FILES_MATCHING PATTERN "*.h"
+)   

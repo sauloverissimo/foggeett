@@ -80,7 +80,8 @@
         "xlocmes": "cpp",
         "xlocmon": "cpp",
         "xlocnum": "cpp",
-        "xloctime": "cpp"
+        "xloctime": "cpp",
+        "string_view": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

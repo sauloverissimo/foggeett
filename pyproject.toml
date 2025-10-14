@@ -1,12 +1,12 @@
 [project]
 name = "foggeett"
-version = "0.1.0"
+version = "0.1.3"
 description = "High-performance C++ library for technical analysis and trading indicators."
 authors = [
-  {name = "Saulo Veríssimo", email = "sauloverissimo@outlook.com"}
+  { name = "Saulo Veríssimo", email = "sauloverissimo@outlook.com" }
 ]
 readme = "README.md"
-license = {file = "LICENSE"}
+license = { file = "LICENSE" }
 requires-python = ">=3.9"
 classifiers = [
   "Programming Language :: Python :: 3",
@@ -27,5 +27,3 @@ build-backend = "scikit_build_core.build"
 wheel.packages = ["foggeett"]
 minimum-version = "0.11"
 build.verbose = true
-
-

@@ -35,3 +35,6 @@ struct KPIResult {
 #include "functions/obv.hpp"
 #include "functions/adx.hpp"
 #include "functions/enrich.hpp"
+#include "functions/rsi.hpp"
+#include "functions/extract.hpp"
+
