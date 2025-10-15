@@ -12,16 +12,19 @@
 namespace py = pybind11;
 
 /*
- * Versão final — Corrige o bug de inferência de tipo bool/int:
- * 1️⃣ Lê ticks Python e converte mantendo bool puro
- * 2️⃣ Processa (opcional) sem GIL
- * 3️⃣ Retorna com tipos preservados
+ * 🔹 Versão revisada (Foggeett 2025)
+ * 
+ * Objetivos:
+ * 1️⃣ Corrige o bug de meta-KPIs — campos como "rsi_24" e "macd_26"
+ *     agora são lidos como valores numéricos se estiverem no passthrough.
+ * 2️⃣ Mantém compatibilidade total com uso anterior (ticks, flags, etc.).
+ * 3️⃣ Preserva tipos bool/int/float e paralelização opcional com OpenMP.
  */
 
 struct NativeRow {
-    std::unordered_map<std::string, double> numerics;   // price, volume, etc.
+    std::unordered_map<std::string, double> numerics;   // price, volume, rsi_24, etc.
     std::unordered_map<std::string, bool>   flags;      // booleans
-    std::unordered_map<std::string, py::object> passthrough; // tick_id, timestamp, etc.
+    std::unordered_map<std::string, py::object> passthrough; // metadados (tick_id, timestamp, etc.)
 };
 
 std::vector<std::unordered_map<std::string, py::object>>
@@ -34,6 +37,9 @@ extract_fields_native(
     std::vector<NativeRow> rows;
     rows.reserve(py::len(ticks));
 
+    // ============================================================
+    // 🔹 Leitura dos ticks
+    // ============================================================
     for (auto item : ticks) {
         if (!py::isinstance<py::dict>(item))
             continue;
@@ -42,6 +48,9 @@ extract_fields_native(
         NativeRow row;
         bool valido = true;
 
+        // ------------------------------------------------------------
+        // 1️⃣ Extrai campos principais (fields)
+        // ------------------------------------------------------------
         for (const auto& k : fields) {
             if (!t.contains(py::str(k))) { valido = false; break; }
             py::object val = t[py::str(k)];
@@ -55,30 +64,64 @@ extract_fields_native(
                 try { row.numerics[k] = py::cast<double>(val); }
                 catch (...) { valido = false; break; }
             }
-            else { valido = false; break; }
+            else {
+                // ignora campos não numéricos (ex: strings)
+                valido = false; break;
+            }
         }
 
         if (!valido)
             continue;
 
+        // ------------------------------------------------------------
+        // 2️⃣ Extrai campos passthrough — agora com suporte numérico!
+        // ------------------------------------------------------------
         for (const auto& k : passthrough) {
-            if (t.contains(py::str(k)))
-                row.passthrough[k] = t[py::str(k)];
+            if (!t.contains(py::str(k))) continue;
+
+            py::object val = t[py::str(k)];
+
+            // 🔹 Se o passthrough for numérico, adiciona também em numerics
+            if (py::isinstance<py::float_>(val) || py::isinstance<py::int_>(val)) {
+                try {
+                    row.numerics[k] = py::cast<double>(val);
+                } catch (...) {
+                    row.passthrough[k] = val;
+                }
+            }
+            // 🔹 Se for bool, adiciona em flags
+            else if (py::isinstance<py::bool_>(val)) {
+                try {
+                    row.flags[k] = py::cast<bool>(val);
+                } catch (...) {
+                    row.passthrough[k] = val;
+                }
+            }
+            // 🔹 Caso contrário, mantém como passthrough padrão (metadados)
+            else {
+                row.passthrough[k] = val;
+            }
         }
 
         rows.emplace_back(std::move(row));
     }
 
-    // processamento paralelo opcional
+    // ============================================================
+    // 🔹 (Opcional) processamento paralelo sem GIL
+    // ============================================================
     {
         py::gil_scoped_release release;
 #ifdef FOGGEETT_USE_OPENMP
         #pragma omp parallel for schedule(static)
 #endif
-        for (size_t i = 0; i < rows.size(); ++i) { }
+        for (size_t i = 0; i < rows.size(); ++i) {
+            // Nada a processar por enquanto — reservado para validações futuras
+        }
     }
 
-    // reconstrução do retorno
+    // ============================================================
+    // 🔹 Reconstrução do retorno (para Python)
+    // ============================================================
     std::vector<std::unordered_map<std::string, py::object>> resultado;
     resultado.reserve(rows.size());
 
